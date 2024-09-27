@@ -122,10 +122,14 @@ metadata:
   namespace: castai-agent
 spec:
   schedule: "0 22 * * 1-5"
+  timeZone: Etc/UTC
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
+        metadata:
+          annotations:
+            autoscaling.cast.ai/removal-disabled: "true"
         spec:
           tolerations:
           - key: "scheduling.cast.ai/paused-cluster"
@@ -158,7 +162,7 @@ spec:
                   configMapKeyRef:
                     name: castai-cluster-controller
                     key: CLUSTER_ID
-          restartPolicy: Never
+          restartPolicy: OnFailure
       backoffLimit: 0
 ---
 apiVersion: batch/v1
@@ -168,10 +172,14 @@ metadata:
   namespace: castai-agent
 spec:
   schedule: "0 7 * * 1-5"
+  timeZone: Etc/UTC
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
+        metadata:
+          annotations:
+            autoscaling.cast.ai/removal-disabled: "true"
         spec:
           priorityClassName: system-cluster-critical
           tolerations:
@@ -195,6 +203,6 @@ spec:
                   configMapKeyRef:
                     name: castai-cluster-controller
                     key: CLUSTER_ID
-          restartPolicy: Never
+          restartPolicy: OnFailure
       backoffLimit: 0
 ---
